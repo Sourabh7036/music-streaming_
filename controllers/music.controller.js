@@ -53,4 +53,37 @@ const createAlbum = async (req, res) => {
   });
 };
 
-export default { createMusic, createAlbum };
+const getAllMusics = async (req, res) => {
+  const musics = await Music.find().populate("artist");
+
+  res.status(200).json({
+    message: "Music retreive all successfully",
+    musics: musics,
+  });
+};
+
+const getAllAlbums = async (req, res) => {
+  const albums = await Album.find().select("-musics").populate("artist");
+
+  res.status(200).json({
+    message: "Album get successfully",
+    albums,
+  });
+};
+
+const getAlbumbyId = async (req, res) => {
+  const { albumId } = req.params;
+  const albums = await Album.findById(albumId)
+    .populate("artist")
+    .populate("musics");
+
+  res.status(200).json({
+    message: "All album musics retreive successfully",
+    albums,
+  });
+};
+
+
+
+
+export default { createMusic, createAlbum, getAllMusics, getAllAlbums , getAlbumbyId};
